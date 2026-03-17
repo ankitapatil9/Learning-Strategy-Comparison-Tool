@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Strategy Comparison Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Learning Strategy Comparison Tool</h1>
+            <p>Compare how Rote Learning and Inductive Learning make predictions</p>
+        </header>
+
+        <section class="explanations">
+            <div class="card">
+                <h2>Rote Learning</h2>
+                <p>Memorizes exact training examples. Can only predict results it has seen before. If the input doesn't match any stored example, it cannot make a prediction.</p>
+            </div>
+
+            <div class="card">
+                <h2>Inductive Learning</h2>
+                <p>Learns general rules from data. Can make predictions for new, unseen examples by applying learned patterns.</p>
+            </div>
+        </section>
+
+        <section class="dataset-section">
+            <h2>Training Dataset</h2>
+            <table id="dataset-table">
+                <thead>
+                    <tr>
+                        <th>Study Hours</th>
+                        <th>Exam Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hours, result in dataset.items() %}
+                    <tr>
+                        <td>{{ hours }}</td>
+                        <td class="result-{{ result.lower() }}">{{ result }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section class="prediction-section">
+            <h2>Make a Prediction</h2>
+            <form id="prediction-form">
+                <div class="input-group">
+                    <label for="hours">Study Hours:</label>
+                    <input type="number" id="hours" name="hours" min="0" required>
+                </div>
+                <button type="submit" class="predict-btn">Predict Result</button>
+            </form>
+
+            <div id="results" class="results-container" style="display: none;">
+                <div class="results-grid">
+                    <div class="result-card" id="rote-card">
+                        <h3>Rote Learning</h3>
+                        <div class="prediction-result" id="rote-result">-</div>
+                        <div class="accuracy">Accuracy: <span id="rote-accuracy">-</span>%</div>
+                    </div>
+
+                    <div class="result-card" id="inductive-card">
+                        <h3>Inductive Learning</h3>
+                        <div class="prediction-result" id="inductive-result">-</div>
+                        <div class="accuracy">Accuracy: <span id="inductive-accuracy">-</span>%</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="accuracyChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
